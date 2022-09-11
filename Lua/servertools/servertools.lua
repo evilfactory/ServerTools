@@ -8,7 +8,19 @@ else
 
 end
 
+local timer = 0
+Hook.Add("think", "ServerTools.Think", function ()
+    if timer > Timer.GetTime() then
+        return
+    end
+
+    Hook.Call("st.slowthink")
+
+    timer = Timer.GetTime() + 1
+end)
+
 ST.Modules.Register("servertools.modules.adminpm")
 ST.Modules.Register("servertools.modules.jobbans")
 ST.Modules.Register("servertools.modules.discordlogalerts")
+ST.Modules.Register("servertools.modules.brokenhandcuffs")
 ST.Modules.Register("servertools.modules.networkscanner")
