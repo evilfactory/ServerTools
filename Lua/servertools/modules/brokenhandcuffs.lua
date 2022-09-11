@@ -3,7 +3,7 @@ local module = {}
 module.Name = "BrokenHandcuffs"
 
 module.Config = {
-    Enabled = true,
+    Enabled = false,
     ConditionDecrease = 1.5,
 }
 
