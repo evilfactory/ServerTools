@@ -13,11 +13,13 @@ module.OnEnable = function ()
 
     Hook.Add("jobsAssigned", "ServerTools.JobBans", function ()
         for key, value in pairs(Client.ClientList) do
-            local job = value.AssignedJob.Prefab.Identifier.Value
-            local banned = module.Config.JobBanned[value.SteamID]
-            if banned ~= nil then
-                if banned[job] then
-                    value.AssignedJob = JobVariant(JobPrefab.Get("assistant"), 0)
+            if value.AssignedJob then
+                local job = value.AssignedJob.Prefab.Identifier.Value
+                local banned = module.Config.JobBanned[value.SteamID]
+                if banned ~= nil then
+                    if banned[job] then
+                        value.AssignedJob = JobVariant(JobPrefab.Get("assistant"), 0)
+                    end
                 end
             end
         end
