@@ -24,7 +24,7 @@ end
 
 module.OnEnable = function ()
     Hook.Add("characterDeath", "ServerTools.DiscordLogAlerts.Deaths", function (character)
-        if not character.IsHuman then return end
+        if not character.IsHuman or character.IsBot then return end
 
         local name = character.Name
 
