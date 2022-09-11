@@ -8,10 +8,6 @@ else
 
 end
 
-Hook.Add("roundEnd", "ServerTools.SaveModules", function ()
-    ST.Modules.SaveAll()
-end)
-
 ST.Modules.Register("servertools.modules.adminpm")
 ST.Modules.Register("servertools.modules.jobbans")
 ST.Modules.Register("servertools.modules.discordlogalerts")

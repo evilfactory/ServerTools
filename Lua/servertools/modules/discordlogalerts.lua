@@ -5,7 +5,7 @@ module.Name = "DiscordLogAlerts"
 module.Config = {
     Enabled = false,
     Webhook = "Enter Here Your Discord Web Hook URL",
-    LogKeyWords = {"Nuclear Shell"}
+    LogKeyWords = {"Nuclear Shell", "Velonaceps Calyx Eggs", "Morbusine", "Sufforin", "Cyanide", "Radiotoxin", "Frag Grenade", "Incendium Grenade"}
 }
 
 local function EscapeQuotes(str)

@@ -53,6 +53,8 @@ module.OnEnable = function ()
         end
 
         ST.Utils.SendChat(string.format("\"%s\" has been banned from using the job \"%s\"", target.Name, args[2]), client, Color.Green)
+
+        ST.Modules.Save(module)
     end, ClientPermissions.ConsoleCommands)
 
     ST.Commands.Add({"!unbanjob", "!jobunban", "!unjobban"}, function (args, client)
@@ -80,6 +82,8 @@ module.OnEnable = function ()
             end
 
             ST.Utils.SendChat(string.format("\"%s\" has been unbanned from using the job %s", target.Name, args[2]), client, Color.Green)
+
+            ST.Modules.Save(module)
         end
     end, ClientPermissions.ConsoleCommands)
 
