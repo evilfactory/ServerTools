@@ -1,0 +1,14 @@
+{
+    "Lua.diagnostics.globals": [
+        "ServerLogMessageType",
+        "SERVER",
+        "Byte",
+        "UShort"
+    ],
+    "Lua.diagnostics.disable": [
+        "undefined-field",
+        "undefined-global",
+        "missing-parameter",
+        "param-type-mismatch"
+    ]
+}
