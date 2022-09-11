@@ -67,6 +67,8 @@ commands.Execute = function (text, client)
         args = commands.Parse(text)
     end
 
+    if #args == 0 then return end
+
     local command = table.remove(args, 1)
 
     for key, value in pairs(commands.RegisteredCommands) do
@@ -82,8 +84,6 @@ commands.Execute = function (text, client)
             end
         end
     end
-
-    return nil
 end
 
 return commands

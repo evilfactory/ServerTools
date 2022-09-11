@@ -58,8 +58,8 @@ module.OnEnable = function ()
 
             if character.CauseOfDeath.DamageSource then
                 damageSource = tostring(character.CauseOfDeath.DamageSource)
-                if tostring(damageSource) == "Human" then
-                    damageSource = damageSource.Name
+                if damageSource == "Human" then
+                    damageSource = character.CauseOfDeath.DamageSource.Name
                 end
             end
         end
