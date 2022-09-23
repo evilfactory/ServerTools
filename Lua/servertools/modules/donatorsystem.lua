@@ -51,7 +51,7 @@ module.OnEnable = function ()
 
         module.Config.ClientStyle[tostring(client.SteamID)] = args[1]
 
-        cmd:Reply(string.format("Set chat style to \"%s\"", args[1]), client)
+        cmd:Reply(string.format("Set chat style to \"%s\"", args[1]))
         ST.Modules.Save(module)
     end, ClientPermissions.KarmaImmunity)
 

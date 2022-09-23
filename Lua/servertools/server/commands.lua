@@ -38,13 +38,15 @@ Hook.Add("chatMessage", "ServerTools.ChatMessage", function (text, client)
     end
 end)
 
-Game.AddCommand("st_cli", "", function (args)
-    local command, args = ST.Commands.Prepare(args)
+Game.AddCommand("st_cli", "", function (gameArgs)
+    local command, args = ST.Commands.Prepare(gameArgs)
 
     if command == nil then
         ServerCommandReply:Reply("Command not found.", Color.Red)
         return
     end
+
+    Game.Log(string.format("[ServerTools] Server console executed \"%s\".", table.concat(gameArgs, " ")), ServerLogMessageType.ConsoleUsage)
 
     local success, message = ST.Commands.CanExecute(command)
 
