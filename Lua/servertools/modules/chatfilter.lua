@@ -1,5 +1,3 @@
--- this is a simple network package debug tool, do not use this if you dont know what you are doing.
-
 local module = {}
 
 module.Name = "ChatFilter"
