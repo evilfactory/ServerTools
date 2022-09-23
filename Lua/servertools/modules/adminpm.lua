@@ -17,16 +17,16 @@ end
 module.OnEnable = function ()
     if CLIENT then return end
 
-    ST.Commands.Add("!adminpm", function (args, client)
+    ST.Commands.Add("!adminpm", function (args, cmd, client)
         if client.HasPermission(ClientPermissions.ConsoleCommands) then
             local target = ST.Utils.FindClientByName(args[1])
             if target == nil then
-                ST.Utils.SendChat("Client not found.", client, Color.Red)
+                cmd:Reply("Client not found.", Color.Red)
                 return true
             end
 
             if args[2] == nil then
-                ST.Utils.SendChat("Please specify a message to send.", client, Color.Red)
+                cmd:Reply("Please specify a message to send.", Color.Red)
                 return true
             end
 
@@ -38,7 +38,7 @@ module.OnEnable = function ()
             return true
         else
             if args[1] == nil then
-                ST.Utils.SendChat("Please specify a message to send.", client, Color.Red)
+                cmd:Reply("Please specify a message to send.", Color.Red)
                 return true
             end
 

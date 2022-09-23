@@ -1,12 +1,36 @@
-Hook.Add("chatMessage", "ServerTools.ChatMessage", function (text, client)
-    local result, message = ST.Commands.Execute(text, client)
+local ClientCommandReply = {
+    Client = nil,
 
-    if result == true then
+    Reply = function (self, message, color)
+        ST.Utils.SendChat(message, self.Client, color)
+    end
+}
+
+local ServerCommandReply = {
+    Reply = function (self, message, color)
+        print(message)
+    end
+}
+
+Hook.Add("chatMessage", "ServerTools.ChatMessage", function (text, client)
+    if client == nil then return end
+
+    local command, args = ST.Commands.Prepare(text)
+
+    if command == nil then
+        return
+    end
+
+    local success, message = ST.Commands.CanExecute(command, client)
+
+    if success then
         Game.Log(string.format("[ServerTools] %s used command \"%s\".", ST.Utils.ClientLogName(client), text), ServerLogMessageType.ConsoleUsage)
 
-        return true
-    elseif result == false then
+        ClientCommandReply.Client = client
+        ST.Commands.Execute(command, args, ClientCommandReply, client)
 
+        return true
+    else
         Game.Log(string.format("[ServerTools] %s attempted to use command \"%s\" but failed with reason \"%s\"", ST.Utils.ClientLogName(client), text, message), ServerLogMessageType.ConsoleUsage)
 
         ST.Utils.SendChat(message, client, Color.Red)
@@ -14,14 +38,31 @@ Hook.Add("chatMessage", "ServerTools.ChatMessage", function (text, client)
     end
 end)
 
-ST.Commands.Add("!reloadmodules", function (args, client)
+Game.AddCommand("st_cli", "", function (args)
+    local command, args = ST.Commands.Prepare(args)
+
+    if command == nil then
+        ServerCommandReply:Reply("Command not found.", Color.Red)
+        return
+    end
+
+    local success, message = ST.Commands.CanExecute(command)
+
+    if success then
+        ST.Commands.Execute(command, args, ServerCommandReply)
+    else
+        ServerCommandReply:Reply(message, Color.Red)
+    end
+end)
+
+ST.Commands.Add("!reloadmodules", function (args, cmd)
     ST.Modules.ReloadAll()
 
-    ST.Utils.SendChat("Reloaded modules.", client)
-end, ClientPermissions.ConsoleCommands)
+    cmd:Reply("Reloaded modules.")
+end, ClientPermissions.ConsoleCommands, true)
 
-ST.Commands.Add("!savemodules", function (args, client)
+ST.Commands.Add("!savemodules", function (args, cmd)
     ST.Modules.SaveAll()
 
-    ST.Utils.SendChat("Saved modules.", client)
-end, ClientPermissions.ConsoleCommands)
+    cmd:Reply("Saved modules.")
+end, ClientPermissions.ConsoleCommands, true)

@@ -26,3 +26,5 @@ ST.Modules.Register("servertools.modules.chatfilter")
 ST.Modules.Register("servertools.modules.brokenhandcuffs")
 ST.Modules.Register("servertools.modules.networkscanner")
 ST.Modules.Register("servertools.modules.donatorsystem")
+ST.Modules.Register("servertools.modules.schedulereloadlua")
+

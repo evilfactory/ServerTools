@@ -25,27 +25,27 @@ module.OnEnable = function ()
         end
     end)
 
-    ST.Commands.Add({"!banjob", "!jobban"}, function (args, client)
+    ST.Commands.Add({"!banjob", "!jobban"}, function (args, cmd, client)
         if #args < 2 then
-            ST.Utils.SendChat("Usage: !banjob \"Name\" \"Job\"", client, Color.Red)
+            cmd:Reply("Usage: !banjob \"Name\" \"Job\"", Color.Red)
             return true
         end
 
         local target = ST.Utils.FindClientByName(args[1])
         if target == nil then
-            ST.Utils.SendChat("Client not found.", client, Color.Red)
+            cmd:Reply("Client not found.", Color.Red)
             return
         end
 
         local job = JobPrefab.Get(args[2])
         if job == nil then
-            ST.Utils.SendChat("Job not found.", client, Color.Red)
+            cmd:Reply("Job not found.", Color.Red)
             return
         end
 
         if module.Config.JobBanned[target.SteamID] then
             if module.Config.JobBanned[target.SteamID][args[2]] then
-                ST.Utils.SendChat("This client is already banned from this job.", client, Color.Red)
+                cmd:Reply("This client is already banned from this job.", Color.Red)
                 return
             end
 
@@ -54,27 +54,27 @@ module.OnEnable = function ()
             module.Config.JobBanned[target.SteamID] = {[args[2]] = true}
         end
 
-        ST.Utils.SendChat(string.format("\"%s\" has been banned from using the job \"%s\"", target.Name, args[2]), client, Color.Green)
+        cmd:Reply(string.format("\"%s\" has been banned from using the job \"%s\"", target.Name, args[2]), Color.Green)
 
         ST.Modules.Save(module)
     end, ClientPermissions.ConsoleCommands)
 
-    ST.Commands.Add({"!unbanjob", "!jobunban", "!unjobban"}, function (args, client)
+    ST.Commands.Add({"!unbanjob", "!jobunban", "!unjobban"}, function (args, cmd, client)
         if #args < 2 then
-            ST.Utils.SendChat("Usage: !unbanjob \"Name\" \"Job\"", client, Color.Red)
+            cmd:Reply("Usage: !unbanjob \"Name\" \"Job\"", Color.Red)
             return true
         end
 
         local target = ST.Utils.FindClientByName(args[1])
         if target == nil then
-            ST.Utils.SendChat("Client not found.", client, Color.Red)
+            cmd:Reply("Client not found.", Color.Red)
             return
         end
 
         local jobBanned = module.Config.JobBanned[client.SteamID]
 
         if jobBanned == nil or jobBanned[args[2]] == nil then
-            ST.Utils.SendChat("This client is not banned from this job.", client, Color.Red)
+            cmd.Reply("This client is not banned from this job.", Color.Red)
             return
         else
             jobBanned[args[2]] = nil
@@ -83,21 +83,21 @@ module.OnEnable = function ()
                 module.Config.JobBanned[client.SteamID] = nil
             end
 
-            ST.Utils.SendChat(string.format("\"%s\" has been unbanned from using the job %s", target.Name, args[2]), client, Color.Green)
+            cmd:Reply(string.format("\"%s\" has been unbanned from using the job %s", target.Name, args[2]), Color.Green)
 
             ST.Modules.Save(module)
         end
     end, ClientPermissions.ConsoleCommands)
 
-    ST.Commands.Add({"!jobbans"}, function (args, client)
+    ST.Commands.Add({"!jobbans"}, function (args, cmd, client)
         if #args < 1 then
-            ST.Utils.SendChat("Usage: !jobbans \"Name\"", client, Color.Red)
+            cmd:Reply("Usage: !jobbans \"Name\"", Color.Red)
             return true
         end
 
         local target = ST.Utils.FindClientByName(args[1])
         if target == nil then
-            ST.Utils.SendChat("Client not found.", client, Color.Red)
+            cmd:Reply("Client not found.", Color.Red)
             return
         end
 
@@ -113,8 +113,7 @@ module.OnEnable = function ()
             end
         end
 
-        ST.Utils.SendChat(text, client, Color.Green)
-        ST.Utils.SendPopup(text, client)
+        cmd:Reply(text, Color.Green)
     end)
 end
 

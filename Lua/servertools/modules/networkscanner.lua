@@ -37,17 +37,22 @@ end
 module.OnEnable = function ()
     if CLIENT then return end
 
-    ST.Commands.Add("!startnetworkscan", function(args)
+    ST.Commands.Add("!startnetworkscan", function(args, cmd)
         StartNetworkScan()
         local time = tonumber(args[1])
         if time ~= nil then
+            cmd:Reply("Network scan started and its going to end in " .. time .. " seconds.")
             Timer.Wait(EndNetworkScan, time * 1000)
+        else
+            cmd:Reply("Network scan started")
         end
-    end, ClientPermissions.ConsoleCommands)
+    end, ClientPermissions.ConsoleCommands, true)
 
-    ST.Commands.Add("!endnetworkscan", function ()
+    ST.Commands.Add("!endnetworkscan", function (args, cmd)
+        cmd:Reply("Network scan ended")
+
         EndNetworkScan()
-    end, ClientPermissions.ConsoleCommands)
+    end, ClientPermissions.ConsoleCommands, true)
 end
 
 module.OnDisable = function ()

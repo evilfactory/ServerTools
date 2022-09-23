@@ -17,14 +17,16 @@ module.Config = {
     ClientStyle = {}
 }
 
-Hook.Patch("Barotrauma.Networking.GameServer", "SendDirectChatMessage", {"Barotrauma.Networking.ChatMessage", "Barotrauma.Networking.Client"}, function (self, ptable)
-    Hook.Call("DonatorSystem.ChatMessage", ptable["msg"])
-end)
+if SERVER then
+    Hook.Patch("Barotrauma.Networking.GameServer", "SendDirectChatMessage", {"Barotrauma.Networking.ChatMessage", "Barotrauma.Networking.Client"}, function (self, ptable)
+        Hook.Call("DonatorSystem.ChatMessage", ptable["msg"])
+    end)
+end
 
 module.OnEnable = function ()
     if CLIENT then return end
 
-    ST.Commands.Add("!chatstyle", function (args, client)
+    ST.Commands.Add("!chatstyle", function (args, cmd, client)
         if #args < 1 then
             local availableStyles = ""
 
@@ -32,7 +34,7 @@ module.OnEnable = function ()
                 availableStyles = availableStyles .. key .. "\n"
             end
 
-            ST.Utils.SendChat("Usage: !chatstyle \"StyleName\"\n\nAvailable Styles:\n" .. availableStyles)
+            cmd:Reply("Usage: !chatstyle \"StyleName\"\n\nAvailable Styles:\n" .. availableStyles)
             return true
         end
 
@@ -43,13 +45,13 @@ module.OnEnable = function ()
                 availableStyles = availableStyles .. key .. "\n"
             end
 
-            ST.Utils.SendChat("Usage: !chatstyle \"StyleName\"\n\nAvailable Styles:\n" .. availableStyles)
+            cmd:Reply("Usage: !chatstyle \"StyleName\"\n\nAvailable Styles:\n" .. availableStyles)
             return
         end
 
         module.Config.ClientStyle[tostring(client.SteamID)] = args[1]
 
-        ST.Utils.SendChat(string.format("Set chat style to \"%s\"", args[1]), client)
+        cmd:Reply(string.format("Set chat style to \"%s\"", args[1]), client)
         ST.Modules.Save(module)
     end, ClientPermissions.KarmaImmunity)
 

@@ -25,13 +25,14 @@ commands.Parse = function (text)
     return result
 end
 
-commands.Add = function (names, onExecute, permissionRequired)
+commands.Add = function (names, onExecute, permissionRequired, isServerConsoleCallable)
     if type(names) == "string" then names = {names} end
 
     local command = {}
     command.Names = names
     command.OnExecute = onExecute
     command.PermissionRequired = permissionRequired
+    command.IsServerConsoleCallable = isServerConsoleCallable or false
 
     table.insert(commands.RegisteredCommands, command)
 end
@@ -49,16 +50,18 @@ commands.Remove = function (name)
 end
 
 commands.CanExecute = function (command, client)
-    if client == nil then return true end
-    
-    if command.PermissionRequired ~= nil and not client.HasPermission(command.PermissionRequired) then
+    if not command.IsServerConsoleCallable and client == nil then
+        return false, "This command cannot be executed from the server console."
+    end
+
+    if client ~= nil and command.PermissionRequired ~= nil and not client.HasPermission(command.PermissionRequired) then
         return false, "You do not have permission to execute this command."
     end
 
     return true
 end
 
-commands.Execute = function (text, client)
+commands.Prepare = function (text)
     local args
 
     if type(text) == "table" then
@@ -74,16 +77,18 @@ commands.Execute = function (text, client)
     for key, value in pairs(commands.RegisteredCommands) do
         for key2, value2 in pairs(value.Names) do
             if value2 == command then
-                local success, message = commands.CanExecute(value, client)
-                if not success then
-                    return false, message
-                end
-
-                value.OnExecute(args, client)
-                return true
+                return value, args
             end
         end
     end
+end
+
+commands.Execute = function (command, args, ...)
+    if command == nil then
+        error("command is nil", 2)
+    end
+
+    command.OnExecute(args, ...)
 end
 
 return commands
