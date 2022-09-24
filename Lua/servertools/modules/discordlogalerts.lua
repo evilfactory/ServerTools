@@ -73,9 +73,14 @@ module.OnEnable = function ()
 
     Hook.Add("roundEnd", "ServerTools.DiscordLogAlerts.RoundEnd", function ()
         local traitors = ""
-        for key, value in pairs(Client.ClientList) do
-            if value.Character ~= nil and value.Character.IsTraitor then
-                traitors = traitors .. value.SteamID .. " '" .. value.Character.Name .. "' "
+        for key, value in pairs(Character.CharacterList) do
+            if value.IsTraitor then
+                local client = ST.Utils.FindClientByCharacter(value)
+                if client == nil then
+                    traitors = traitors .. "(?) '" .. value.Name .. "' "
+                else
+                    traitors = traitors .. "(" .. client.SteamID .. ") '" .. value.Name .. "' "
+                end
             end
         end
         SendMessage(string.format("```Round has ended Traitors: %s```", traitors))
