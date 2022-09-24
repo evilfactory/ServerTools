@@ -1,6 +1,6 @@
 local modules = {}
 
-local json = require("servertools.prettyjson")
+local json = require("servertools.json")
 
 modules.RegisteredModules = {}
 modules.Register = function (module)
@@ -37,12 +37,12 @@ modules.Load = function (module)
 
     if File.Exists(configPath) then
         local file = File.Read(configPath)
-        config = json.parse(file)
+        config = json.decode(file)
     else
         modules.Save(module)
 
         local file = File.Read(configPath)
-        config = json.parse(file)
+        config = json.decode(file)
     end
 
     for key, value in pairs(config) do
@@ -58,7 +58,8 @@ modules.Save = function (module)
     end
 
     local configPath = ST.Path .. "/config/" .. module.Name .. ".json"
-    local config = json.stringify(module.Config, nil, 4)
+    local config = json.encode(module.Config)
+
     File.Write(configPath, config)
 end
 
