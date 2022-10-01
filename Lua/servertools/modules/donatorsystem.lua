@@ -7,10 +7,10 @@ module.Config = {
 
     Styles = {
         Default = {},
-        Style1 = {
-            Default = {255, 0, 0},
-            Dead = {0, 255, 255},
-            Radio = {255, 0, 255},
+        Meefus = {
+            Default = {255, 71, 111},
+            Dead = {255, 46, 46},
+            Radio = {149, 227, 187},
         },
     },
 
