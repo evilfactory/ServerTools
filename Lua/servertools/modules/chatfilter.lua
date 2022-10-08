@@ -18,7 +18,7 @@ module.Config = {
     BanTime = 9999999,
 }
 
-module.OnEnable = function ()
+module.OnEnabled = function ()
     if CLIENT then return end
 
     Hook.Add("chatMessage", "ChatFilter", function (message, client)

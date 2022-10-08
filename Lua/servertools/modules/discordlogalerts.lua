@@ -22,7 +22,7 @@ for key, value in pairs(CauseOfDeathType) do
     causeOfDeathLookup[value] = key
 end
 
-module.OnEnable = function ()
+module.OnEnabled = function ()
     Hook.Add("characterDeath", "ServerTools.DiscordLogAlerts.Deaths", function (character)
         if not character.IsHuman or character.IsBot then return end
 

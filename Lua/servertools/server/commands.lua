@@ -58,13 +58,21 @@ Game.AddCommand("st_cli", "", function (gameArgs)
 end)
 
 ST.Commands.Add("!reloadmodules", function (args, cmd)
-    ST.Modules.ReloadAll()
+    for module in ST.Modules.All() do
+        module.Load()
+    end
+
+    for module in ST.Modules.All() do
+        module.Reload()
+    end
 
     cmd:Reply("Reloaded modules.")
 end, ClientPermissions.ConsoleCommands, true)
 
 ST.Commands.Add("!savemodules", function (args, cmd)
-    ST.Modules.SaveAll()
+    for module in ST.Modules.All() do
+        module.Save()
+    end
 
     cmd:Reply("Saved modules.")
 end, ClientPermissions.ConsoleCommands, true)

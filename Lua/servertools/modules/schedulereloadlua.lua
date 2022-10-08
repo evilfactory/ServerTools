@@ -6,7 +6,7 @@ module.Config = {
     Enabled = true,
 }
 
-module.OnEnable = function ()
+module.OnEnabled = function ()
     if CLIENT then return end
 
     module.IsScheduled = false

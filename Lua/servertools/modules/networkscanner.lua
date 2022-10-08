@@ -34,7 +34,7 @@ local function EndNetworkScan()
     scanned = {}
 end
 
-module.OnEnable = function ()
+module.OnEnabled = function ()
     if CLIENT then return end
 
     ST.Commands.Add("!startnetworkscan", function(args, cmd)

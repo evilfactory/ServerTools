@@ -7,7 +7,7 @@ module.Config = {
     ConditionDecrease = 1.5,
 }
 
-module.OnEnable = function ()
+module.OnEnabled = function ()
     if CLIENT then return end
 
     Hook.Add("st.slowthink", "BrokenHandcuffs.Think", function ()

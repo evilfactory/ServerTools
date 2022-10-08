@@ -14,7 +14,7 @@ local function SendMessageAdmins(text)
     end
 end
 
-module.OnEnable = function ()
+module.OnEnabled = function ()
     if CLIENT then return end
 
     ST.Commands.Add("!adminpm", function (args, cmd, client)

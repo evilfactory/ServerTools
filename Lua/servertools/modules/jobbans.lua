@@ -8,7 +8,7 @@ module.Config = {
     JobBanned = {}
 }
 
-module.OnEnable = function ()
+module.OnEnabled = function ()
     if CLIENT then return end
 
     Hook.Add("jobsAssigned", "ServerTools.JobBans", function ()

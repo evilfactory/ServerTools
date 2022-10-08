@@ -23,7 +23,7 @@ if SERVER then
     end)
 end
 
-module.OnEnable = function ()
+module.OnEnabled = function ()
     if CLIENT then return end
 
     ST.Commands.Add("!chatstyle", function (args, cmd, client)
