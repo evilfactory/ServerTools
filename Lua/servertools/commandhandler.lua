@@ -7,7 +7,7 @@ commands.Parse = function (text)
 
     if text == nil then return result end
 
-    local spat, epat, buf, quoted = [=[^(["])]=], [=[(["])$]=]
+    local spat, epat, buf, quoted = [=[^(["])]=], [=[(["])$]=], nil, nil
     for str in text:gmatch("%S+") do
         local squoted = str:match(spat)
         local equoted = str:match(epat)

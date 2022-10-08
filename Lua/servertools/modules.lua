@@ -20,7 +20,7 @@ modules.Register = function (module)
 
     module.Save = function() return modules.Save(module) end
     module.SaveFile = function(path) return modules.SaveFile(module, path) end
-    module.SaveJson = function(path) return modules.SaveJson(module, path) end
+    module.SaveJson = function() return modules.SaveJson(module) end
 
     module.Reload = function() return modules.Reload(module) end
 
