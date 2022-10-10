@@ -16,11 +16,11 @@ module.OnEnabled = function ()
     if CLIENT then return end
 
     Hook.Add("client.connected", "Statistics.ClientConnected", function (client)
-        SendData(#Client.ClientList)
+        Timer.Wait(function() SendData(#Client.ClientList) end, 1000)
     end)
 
     Hook.Add("client.disconnected", "Statistics.ClientDisconnected", function (client)
-        SendData(#Client.ClientList)
+        Timer.Wait(function() SendData(#Client.ClientList) end, 1000)
     end)
 end
 
