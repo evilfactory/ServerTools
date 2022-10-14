@@ -30,7 +30,7 @@ module.OnEnabled = function ()
 
         local client = ST.Utils.FindClientByCharacter(character)
         if client ~= nil then
-            name = "`" .. tostring(client.SteamID) .. "` ***" .. name .. "***"
+            name = "`" .. tostring(client.AccountId) .. "` ***" .. name .. "***"
         end
 
         local killer = "Unknown"
@@ -44,7 +44,7 @@ module.OnEnabled = function ()
 
                 local client = ST.Utils.FindClientByCharacter(character.CauseOfDeath.Killer)
                 if client ~= nil then
-                    killer = "`" .. tostring(client.SteamID) .. "` ***" .. killer .. "***"
+                    killer = "`" .. tostring(client.AccountId) .. "` ***" .. killer .. "***"
                 end
             end
 
@@ -79,7 +79,7 @@ module.OnEnabled = function ()
                 if client == nil then
                     traitors = traitors .. "(?) '" .. character.Name .. "' "
                 else
-                    traitors = traitors .. "(" .. client.SteamID .. ") '" .. character.Name .. "' "
+                    traitors = traitors .. "(" .. client.AccountId .. ") '" .. character.Name .. "' "
                 end
             end
         else
@@ -89,7 +89,7 @@ module.OnEnabled = function ()
                     if client == nil then
                         traitors = traitors .. "(?) '" .. value.Name .. "' "
                     else
-                        traitors = traitors .. "(" .. client.SteamID .. ") '" .. value.Name .. "' "
+                        traitors = traitors .. "(" .. tostring(client.AccountId) .. ") '" .. value.Name .. "' "
                     end
                 end
             end
