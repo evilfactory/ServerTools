@@ -79,7 +79,7 @@ module.OnEnabled = function ()
                 if client == nil then
                     traitors = traitors .. "(?) '" .. character.Name .. "' "
                 else
-                    traitors = traitors .. "(" .. client.AccountId .. ") '" .. character.Name .. "' "
+                    traitors = traitors .. "(" .. tostring(client.AccountId) .. ") '" .. character.Name .. "' "
                 end
             end
         else
