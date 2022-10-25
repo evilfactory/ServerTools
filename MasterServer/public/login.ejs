@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('templates/header.ejs') %>
+
+        <title>Barotrauma Server Manager</title>
+
+</head>
+
+<body>
+    <div class="container-middle">
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="pin">Pin:</label>
+                <input type="password" class="form-control" id="pin" placeholder="Enter pin" name="pin">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+
+</html>
