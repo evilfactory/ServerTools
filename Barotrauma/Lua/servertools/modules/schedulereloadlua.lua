@@ -29,7 +29,7 @@ module.OnEnabled = function ()
     end)
 end
 
-module.OnDisable = function ()
+module.OnDisabled = function ()
     if CLIENT then return end
 
     ST.Commands.Remove("!schedulereloadlua")

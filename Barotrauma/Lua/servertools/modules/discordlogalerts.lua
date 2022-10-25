@@ -115,7 +115,7 @@ module.OnEnabled = function ()
     SendMessage("Hello World!")
 end
 
-module.OnDisable = function ()
+module.OnDisabled = function ()
     Hook.Remove("characterDeath", "ServerTools.DiscordLogAlerts.Deaths")
     Hook.Remove("roundStart", "ServerTools.DiscordLogAlerts.RoundStart")
     Hook.Remove("roundEnd", "ServerTools.DiscordLogAlerts.RoundEnd")

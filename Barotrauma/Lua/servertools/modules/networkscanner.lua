@@ -55,7 +55,7 @@ module.OnEnabled = function ()
     end, ClientPermissions.ConsoleCommands, true)
 end
 
-module.OnDisable = function ()
+module.OnDisabled = function ()
     if CLIENT then return end
 
     ST.Commands.Remove("!startnetworkscan")

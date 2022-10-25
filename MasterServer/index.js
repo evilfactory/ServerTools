@@ -1,22 +1,32 @@
 website = {}
 
 const config = require("./config.js")
-const fs = require("fs")
 
 const path = require("path")
-
 const express = require("express")
 const session = require('express-session')
 const app = express()
 
 website.app = app
+website.config = config
 
 app.set('views', path.join(__dirname, '/public'))
 app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
 
 app.use(session({
-    secret: 'IGJRIjgirJGIPrjripjHOPRjgipwjgpwrijgwripjGIPRJNIRWPJ',
+    secret: makeid(64),
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
@@ -46,6 +56,8 @@ app.post("/login", function (req, res) {
         res.redirect("/login")
     }
 })
+
+require("./banlist.js")
 
 app.listen(config.port, function () {
     console.log(`Server listening at port ${config.port}`)
