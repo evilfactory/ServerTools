@@ -4,17 +4,40 @@ module.Name = "DiscordLogAlerts"
 
 module.Config = {
     Enabled = false,
-    Webhook = "Enter Here Your Discord Web Hook URL",
+    AlertWebhook = "",
+    AllWebhook = "",
     LogKeyWords = {"Nuclear Shell", "Velonaceps Calyx Eggs", "Morbusine", "Sufforin", "Cyanide", "Radiotoxin", "Frag Grenade", "Incendium Grenade"}
 }
+
+
+local json = require("servertools.json")
+
+local serverLogMessageTypeLookup = {}
+
+for key, value in pairs(ServerLogMessageType) do
+    serverLogMessageTypeLookup[value] = key
+end
+
+local allLogQueue = {}
+local sendDelay = 0
 
 local function EscapeQuotes(str)
     return str:gsub("\"", "\\\"")
 end
 
-local function SendMessage(message)
+local function SendMessage(message, alert)
+    local webhook = nil
+
+    if alert then
+        webhook = module.Config.AlertWebhook
+        if module.Config.AlertWebhook == "" then return end
+    else
+        webhook = module.Config.AllWebhook
+        if module.Config.AllWebhook == "" then return end
+    end
+
     message = EscapeQuotes(message)
-    Networking.HttpPost(module.Config.Webhook, function(result) end, '{\"content\": \"'..message..'\"}')
+    Networking.HttpPost(webhook, function(result) end, json.encode({content = message}))
 end
 
 local causeOfDeathLookup = {}
@@ -64,11 +87,11 @@ module.OnEnabled = function ()
             end
         end
 
-        SendMessage(string.format("%s has died, killer = %s, death type = `%s`, affliction = `%s`, last damage source = `%s`", name, killer, type, affliction, damageSource))
+        SendMessage(string.format("%s has died, killer = %s, death type = `%s`, affliction = `%s`, last damage source = `%s`", name, killer, type, affliction, damageSource), true)
     end)
 
     Hook.Add("roundStart", "ServerTools.DiscordLogAlerts.RoundStart", function ()
-        SendMessage("```Round has started```")
+        SendMessage("```Round has started```", true)
     end)
 
     Hook.Add("roundEnd", "ServerTools.DiscordLogAlerts.RoundEnd", function ()
@@ -94,10 +117,10 @@ module.OnEnabled = function ()
                 end
             end
         end
-        SendMessage(string.format("```Round has ended Traitors: %s```", traitors))
+        SendMessage(string.format("```Round has ended Traitors: %s```", traitors), true)
     end)
 
-    Hook.Add("serverLog", "ServerTools.DiscordLogAlerts.ServerLog", function (message)
+    Hook.Add("serverLog", "ServerTools.DiscordLogAlerts.ServerLog", function (message, type)
         -- throwing an error here would be quite catastrophic
         pcall(function ()
             for _, keyword in pairs(module.Config.LogKeyWords) do
@@ -109,16 +132,44 @@ module.OnEnabled = function ()
                     break
                 end
             end
+
+            if module.Config.AllWebhook ~= "" then
+                table.insert(allLogQueue, "[" .. serverLogMessageTypeLookup[type] .. "] " .. message)
+            end
         end)
     end)
 
-    SendMessage("Hello World!")
+    Hook.Add("think", "ServerTools.DiscordLogAlerts.Think", function ()
+        if sendDelay > Timer.GetTime() then return end
+        
+        local amount = 0
+        local toSend = ""
+        for key, value in pairs(allLogQueue) do
+            if amount > 25 then
+                break
+            end
+
+            toSend = toSend .. value .. "\n"
+            allLogQueue[key] = nil
+
+            amount = amount + 1
+        end
+
+        if toSend ~= "" then
+            SendMessage(toSend, false)
+        end
+
+        sendDelay = Timer.GetTime() + 5
+    end)
+
+    SendMessage("Hello World!", true)
 end
 
 module.OnDisabled = function ()
     Hook.Remove("characterDeath", "ServerTools.DiscordLogAlerts.Deaths")
     Hook.Remove("roundStart", "ServerTools.DiscordLogAlerts.RoundStart")
     Hook.Remove("roundEnd", "ServerTools.DiscordLogAlerts.RoundEnd")
+    Hook.Remove("serverLog", "ServerTools.DiscordLogAlerts.ServerLog")
 end
 
 return module

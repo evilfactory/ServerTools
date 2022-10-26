@@ -10,12 +10,15 @@
   "author": "EvilFactory",
   "license": "ISC",
   "dependencies": {
+    "discord.js": "^14.6.0",
     "ejs": "^3.1.8",
     "express": "^4.17.1",
     "express-session": "^1.17.3",
     "three": "^0.126.1"
   },
   "nodemonConfig": {
-    "ignore": ["*.json"]
+    "ignore": [
+      "*.json"
+    ]
   }
 }
