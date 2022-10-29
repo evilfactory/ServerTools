@@ -134,7 +134,8 @@ module.OnEnabled = function ()
             end
 
             if module.Config.AllWebhook ~= "" then
-                table.insert(allLogQueue, "[" .. serverLogMessageTypeLookup[type] .. "] " .. message)
+                local time = "<t:" .. tostring(os.time()) .. ":T>"
+                table.insert(allLogQueue, time .. " **[" .. serverLogMessageTypeLookup[type] .. "]** " .. message)
             end
         end)
     end)
