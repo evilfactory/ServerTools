@@ -4,14 +4,14 @@ const fs = require("fs")
 const path = require("path")
 
 function loadData() {
-    if (fs.existsSync(path.join(__dirname, "/data/banlist.json"))) {
-        const data = fs.readFileSync(path.join(__dirname, "/data/banlist.json"))
+    if (fs.existsSync(path.join(__dirname, "../../data/banlist.json"))) {
+        const data = fs.readFileSync(path.join(__dirname, "../../data/banlist.json"))
         baroMS.banList = JSON.parse(data)
     }
 }
 
 function saveData() {
-    fs.writeFileSync(path.join(__dirname, "/data/banlist.json"), JSON.stringify(baroMS.banList))
+    fs.writeFileSync(path.join(__dirname, "../../data/banlist.json"), JSON.stringify(baroMS.banList))
 }
 
 
