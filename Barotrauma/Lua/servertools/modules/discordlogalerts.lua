@@ -128,7 +128,7 @@ module.OnEnabled = function ()
                     message = message:gsub("‖metadata:", "`")
                     message = message:gsub("‖end‖", "***")
                     message = message:gsub("‖", "`***")
-                    Timer.Wait(function() SendMessage(message) end, 1000)
+                    Timer.Wait(function() SendMessage(message, true) end, 1000)
                     break
                 end
             end
