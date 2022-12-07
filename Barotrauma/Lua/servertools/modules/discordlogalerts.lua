@@ -46,6 +46,8 @@ for key, value in pairs(CauseOfDeathType) do
 end
 
 module.OnEnabled = function ()
+    if CLIENT then return end
+
     Hook.Add("characterDeath", "ServerTools.DiscordLogAlerts.Deaths", function (character)
         if not character.IsHuman or character.IsBot then return end
 
@@ -167,6 +169,8 @@ module.OnEnabled = function ()
 end
 
 module.OnDisabled = function ()
+    if CLIENT then return end
+
     Hook.Remove("characterDeath", "ServerTools.DiscordLogAlerts.Deaths")
     Hook.Remove("roundStart", "ServerTools.DiscordLogAlerts.RoundStart")
     Hook.Remove("roundEnd", "ServerTools.DiscordLogAlerts.RoundEnd")
