@@ -8,11 +8,13 @@ module.Config = {
     UniqueId = "barotrauma-server-1234567890",
     SharedBanList = true,
     SendStatusUpdates = true,
+    SendLogs = true,
 }
 
 if SERVER then
     loadfile(ST.Path .. "/Lua/servertools/modules/masterserver/banlist.lua")(module)
     loadfile(ST.Path .. "/Lua/servertools/modules/masterserver/statusupdate.lua")(module)
+    loadfile(ST.Path .. "/Lua/servertools/modules/masterserver/sendlogs.lua")(module)
 end
 
 local lastSend = 0
@@ -22,10 +24,12 @@ module.OnEnabled = function ()
 
     if module.Config.SharedBanList then
         Hook.Add("think", "MasterServer.Think", function ()
+            module.UpdateLog()
             if lastSend > Timer.GetTime() then return end
 
             lastSend = Timer.GetTime() + 60
             module.GetBanList()
+            Timer.Wait(module.SendStatusUpdate, 100)
         end)
 
         Hook.Add("banList.ban", "MasterServer.Ban", function (account, reason)
@@ -55,9 +59,16 @@ module.OnEnabled = function ()
         end)
         Hook.Add("roundStart", "MasterServer.RoundStart", function ()
             Timer.Wait(module.SendStatusUpdate, 100)
+            Timer.Wait(module.NewRound, 100)
         end)
         Hook.Add("roundEnd", "MasterServer.RoundEnd", function ()
             Timer.Wait(module.SendStatusUpdate, 100)
+        end)
+        
+        Hook.Add("serverLog", "MasterServer.SendLogs", function (message, type)
+            Timer.Wait(function ()
+                module.SendLog(message, type)
+            end, 100)
         end)
 
         module.SendStatusUpdate()

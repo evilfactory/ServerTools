@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('templates/header.ejs') %>
+
+    <title>Barotrauma Server Manager</title>
+
+</head>
+
+<body>
+    <%- include('templates/navbar.ejs') %>
+    <div class="container">
+        <% files.forEach(file => { %>
+            <h2>
+                <a href="<%= file.Name %>">
+                    <%= file.Name %> - <%= file.Start.toISOString().replace(/T/, ' ').replace(/\..+/, '') %> > <%= file.End.toISOString().replace(/T/, ' ').replace(/\..+/, '') %>
+                </a>
+            </h2>
+        <% }) %>
+    </div>
+</body>
+
+</html>

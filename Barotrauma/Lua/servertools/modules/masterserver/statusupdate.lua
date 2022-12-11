@@ -25,5 +25,5 @@ module.SendStatusUpdate = function()
         Clients = clients
     }
 
-    Networking.HttpPost(module.Config.EndPoint .. "/api/v1/update-status", function (res) end, json.encode(data))
+    Networking.HttpPost(module.Config.EndPoint .. "/api/v1/update-status", function (res) print(res) end, json.encode(data))
 end

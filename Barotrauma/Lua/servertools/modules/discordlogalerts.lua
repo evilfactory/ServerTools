@@ -125,11 +125,11 @@ module.OnEnabled = function ()
     Hook.Add("serverLog", "ServerTools.DiscordLogAlerts.ServerLog", function (message, type)
         -- throwing an error here would be quite catastrophic
         pcall(function ()
+            message = message:gsub("‖metadata:", "`")
+            message = message:gsub("‖end‖", "***")
+            message = message:gsub("‖", "`***")
             for _, keyword in pairs(module.Config.LogKeyWords) do
                 if string.find(message, keyword) then
-                    message = message:gsub("‖metadata:", "`")
-                    message = message:gsub("‖end‖", "***")
-                    message = message:gsub("‖", "`***")
                     Timer.Wait(function() SendMessage(message, true) end, 1000)
                     break
                 end

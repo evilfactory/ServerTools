@@ -1,2 +1,4 @@
 node_modules
 data/log.txt
+data/serverlogs
+data/server.json

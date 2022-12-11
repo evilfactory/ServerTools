@@ -57,7 +57,14 @@ Object.entries(baroMS.config.barotraumaServers).forEach(entry => {
 })
 
 baroMS.updateStatus = function (server, amountPlayers, maxPlayers, submarine) {
-    let serverClient = baroMS.config.barotraumaServers[server].client
+    server = baroMS.config.barotraumaServers[server]
+
+    server.AmountPlayers = amountPlayers
+    server.MaxPlayers = maxPlayers
+    server.Submarine = submarine
+
+    let serverClient = server.client
+    if (!serverClient) { return }
     if (!serverClient.user) { return }
 
     if (submarine == null) {
@@ -71,4 +78,6 @@ baroMS.updateStatus = function (server, amountPlayers, maxPlayers, submarine) {
     }
 }
 
-client.login(baroMS.config.botToken)
+if (baroMS.config.botToken) {
+    client.login(baroMS.config.botToken)
+}

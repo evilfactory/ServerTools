@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('templates/header.ejs') %>
+
+    <title>Barotrauma Server Manager</title>
+
+</head>
+
+<body>
+    <%- include('templates/navbar.ejs') %>
+    <% serverinfo = baroMS.config.barotraumaServers[server] %>
+        <div class="container">
+            <h1><%= serverinfo.Name %></h1>
+            <h2>Players: <%= serverinfo.AmountPlayers ? serverinfo.AmountPlayers : "NA" %> </h2>
+            <h2>MaxPlayers: <%= serverinfo.MaxPlayers ? serverinfo.MaxPlayers : "NA" %> </h2>
+            <h2>Submarine: <%= serverinfo.Submarine ? serverinfo.Submarine : "NA" %> </h2>
+            <h1><a href="logs">Logs</a></h1>
+
+        </div>
+</body>
+
+</html>
