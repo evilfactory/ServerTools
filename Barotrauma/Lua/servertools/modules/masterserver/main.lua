@@ -66,9 +66,7 @@ module.OnEnabled = function ()
         end)
         
         Hook.Add("serverLog", "MasterServer.SendLogs", function (message, type)
-            Timer.Wait(function ()
-                module.SendLog(message, type)
-            end, 100)
+            module.SendLog(message, type)
         end)
 
         module.SendStatusUpdate()
