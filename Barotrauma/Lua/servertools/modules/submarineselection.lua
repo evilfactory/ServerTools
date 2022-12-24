@@ -4,8 +4,19 @@ module.Name = "SubmarineSelection"
 
 module.Config = {
     Enabled = false,
-    MaxPickAmount = 2,
+    MaxPickAmount = 1,
+    RandomPicks = {"Azimuth"}
 }
+
+local function GetRandomSub()
+    local randomPick = module.Config.RandomPicks[math.random(#module.Config.RandomPicks)]
+
+    for key, value in pairs(Game.NetLobbyScreen.subs) do
+        if value.Name == randomPick then
+            return value
+        end
+    end
+end
 
 module.OnEnabled = function ()
     if CLIENT then return end
@@ -21,8 +32,12 @@ module.OnEnabled = function ()
         end
 
         if PickedTimes > module.Config.MaxPickAmount then
-            local submarines = Game.NetLobbyScreen.subs
-            ptable["selectedSub"] = submarines[math.random(#submarines)]
+            local submarine = GetRandomSub()
+
+            if submarine then
+                ptable["selectedSub"] = submarine
+            end
+
             PickedTimes = 0
         end
 
