@@ -89,6 +89,7 @@ app.post("/login", function (req, res) {
 require("./api/banlist.js")
 require("./api/updateStatus.js")
 require("./api/sendLogs.js")
+require("./api/traitormod.js")
 
 app.listen(baroMS.config.port, function () {
     console.log(`Server listening at port ${baroMS.config.port}`)
