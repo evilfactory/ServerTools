@@ -45,7 +45,7 @@ baroMS.app.post("/api/v1/traitormod", function (req, res) {
 
             res.json({ "Points": accData.Points }).end()
         } else {
-            res.json().end()
+            res.json({}).end()
         }
     }
 
