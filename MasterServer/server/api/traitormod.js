@@ -28,7 +28,7 @@ baroMS.app.post("/api/v1/traitormod", function (req, res) {
         let accData = baroMS.traitormodData[data.Account]
 
         if (accData) {
-            console.log("[" + data.UniqueId + "] " + data.Account + " Set points from " + data.Points + " to " + data.Points + "")
+            console.log("[" + data.UniqueId + "] " + data.Account + " Set points from " + accData.Points + " to " + data.Points + "")
             accData.Points = data.Points
         }
         else {
