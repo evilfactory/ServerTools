@@ -4,4 +4,4 @@ if SERVER then return end
 ST = {}
 ST.Path = ...
 
-dofile(ST.Path .. "/Lua/ServerTools/servertools.lua")
+dofile(ST.Path .. "/Lua/servertools/servertools.lua")
