@@ -7,6 +7,7 @@ module.Config = {
 
     -- the message will simply be hidden
     BlockWords = {},
+    BlockReason = "[Chat Filter] Bad word: [word].",
 
     -- the person will be kicked from the server
     KickWords = {},
@@ -26,8 +27,8 @@ module.OnEnabled = function ()
 
         for _, word in pairs(module.Config.BanWords) do
             if string.find(message, string.lower(word)) then
-                local reason = string.gsub(module.Config.KickReason, "%[word%]", word)
-                client.Ban(reason, true, module.Config.BanTime)
+                local reason = string.gsub(module.Config.BanReason, "%[word%]", word)
+                client.Ban(reason, module.Config.BanTime)
                 return true
             end
         end
@@ -42,6 +43,12 @@ module.OnEnabled = function ()
 
         for _, word in pairs(module.Config.BlockWords) do
             if string.find(message, string.lower(word)) then
+                local chatMessage = ChatMessage.Create("", string.gsub(module.Config.BlockReason, "%[word%]", word), ChatMessageType.Default, nil, nil)
+                chatMessage.Color = Color(255, 0, 0, 255)
+                Game.SendDirectChatMessage(chatMessage, client)
+
+                Game.Log("ChatFilter: " .. client.Name .. " tried to say: " .. message, ServerLog.MessageType.ServerMessage)
+
                 return true
             end
         end
