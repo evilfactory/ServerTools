@@ -47,7 +47,7 @@ module.OnEnabled = function ()
                 chatMessage.Color = Color(255, 0, 0, 255)
                 Game.SendDirectChatMessage(chatMessage, client)
 
-                Game.Log("ChatFilter: " .. client.Name .. " tried to say: " .. message, ServerLog.MessageType.ServerMessage)
+                Game.Log("ChatFilter: " .. client.Name .. " tried to say: " .. message, ServerLogMessageType.ServerMessage)
 
                 return true
             end
