@@ -29,6 +29,7 @@ module.OnEnabled = function ()
             if string.find(message, string.lower(word)) then
                 local reason = string.gsub(module.Config.BanReason, "%[word%]", word)
                 client.Ban(reason, module.Config.BanTime)
+                Game.Log("ChatFilter: " .. client.Name .. " tried to say: " .. message, ServerLogMessageType.ServerMessage)
                 return true
             end
         end
@@ -37,6 +38,7 @@ module.OnEnabled = function ()
             if string.find(message, string.lower(word)) then
                 local reason = string.gsub(module.Config.KickReason, "%[word%]", word)
                 client.Kick(reason)
+                Game.Log("ChatFilter: " .. client.Name .. " tried to say: " .. message, ServerLogMessageType.ServerMessage)
                 return true
             end
         end
@@ -46,7 +48,6 @@ module.OnEnabled = function ()
                 local chatMessage = ChatMessage.Create("", string.gsub(module.Config.BlockReason, "%[word%]", word), ChatMessageType.Default, nil, nil)
                 chatMessage.Color = Color(255, 0, 0, 255)
                 Game.SendDirectChatMessage(chatMessage, client)
-
                 Game.Log("ChatFilter: " .. client.Name .. " tried to say: " .. message, ServerLogMessageType.ServerMessage)
 
                 return true
