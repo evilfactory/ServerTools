@@ -4,8 +4,7 @@
 <head>
     <%- include('templates/header.ejs') %>
 
-        <title>Barotrauma Server Manager</title>
-
+    <title>Barotrauma Server Manager</title>
 </head>
 
 <body>
@@ -14,10 +13,16 @@
             <div class="form-group">
                 <label for="pin">Pin:</label>
                 <input type="password" class="form-control" id="pin" placeholder="Enter pin" name="pin">
+                <input type="hidden" name="timezone" id="timezone">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
+
+    <script>
+        tzInput = document.getElementById('timezone')
+        tzInput.value = Intl.DateTimeFormat().resolvedOptions().timeZone
+    </script>
 </body>
 
 </html>

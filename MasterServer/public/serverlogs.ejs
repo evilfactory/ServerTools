@@ -14,7 +14,7 @@
         <% files.forEach(file => { %>
             <h2>
                 <a href="<%= file.Name %>">
-                    <%= file.Name %> - <%= file.Start.toISOString().replace(/T/, ' ').replace(/\..+/, '') %> > <%= file.End.toISOString().replace(/T/, ' ').replace(/\..+/, '') %>
+                    <%= file.Name %> - <%= file.Start.replace(/T/, ' ').replace(/\..+/, '') %> > <%= file.End.replace(/T/, ' ').replace(/\..+/, '') %>
                 </a>
             </h2>
         <% }) %>

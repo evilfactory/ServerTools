@@ -61,7 +61,16 @@ Object.entries(baroMS.config.barotraumaServers).forEach(entry => {
             fileNames.forEach(fileName => {
                 let stats = fs.statSync(`./data/serverlogs/${key}/${fileName}`)
 
-                files.push({Name: fileName, Start: stats.birthtime, End: stats.mtime })
+                files.push({
+                    Name: fileName, 
+                    Start: stats.birthtime.toLocaleString("en-US", {timeZone: req.session.timezone}), 
+                    End: stats.mtime.toLocaleString("en-US", {timeZone: req.session.timezone}),
+                    StartTimeSort: stats.birthtime.getTime(),
+                })
+            })
+
+            files.sort(function (a, b) {
+                return a.StartTimeSort > b.StartTimeSort ? -1 : 1
             })
 
             res.render("serverlogs.ejs", { server: key, files: files })
@@ -80,6 +89,7 @@ app.post("/login", function (req, res) {
 
     if (pin == baroMS.config.pin) {
         req.session.authenticated = true
+        req.session.timezone = req.body.timezone
         res.redirect("/")
     } else {
         res.redirect("/login")
