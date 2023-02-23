@@ -80,6 +80,15 @@ Object.entries(baroMS.config.barotraumaServers).forEach(entry => {
     })
 })
 
+app.get("/bans", function (req, res) {
+    if (req.session.authenticated != true) {
+        res.redirect("/login")
+        return
+    }
+
+    res.render("bans.ejs")
+})
+
 app.get("/login", function (req, res) {
     res.render("login.ejs")
 })
