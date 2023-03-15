@@ -6,10 +6,112 @@ module.Config = {
     Enabled = true,
 }
 
-AccountId = LuaUserData.CreateStatic("Barotrauma.Networking.AccountId")
+LuaUserData.MakeMethodAccessible(Descriptors["Barotrauma.Networking.ServerSettings"], "set_ClientPermissions")
 
 module.OnEnabled = function ()
     if CLIENT then return end
+
+    ST.Commands.Add("!givepermission", function (args, cmd)
+        if #args < 2 then
+            cmd:Reply("Usage: !givepermission \"SteamID\" \"Permission\"", Color.Red)
+            return true
+        end
+
+        local steamid = args[1]
+        local permission = ClientPermissions[args[2]]
+
+        if permission == nil then
+            cmd:Reply("Invalid Permission.", Color.Red)
+            return true
+        end
+
+        local account = AccountId.Parse(steamid)
+
+        if account == nil then
+            cmd:Reply("Invalid SteamID.", Color.Red)
+            return true
+        end
+
+        local oldPermission
+
+        local permissions = Game.ServerSettings.ClientPermissions
+        for key, value in pairs(permissions) do
+            if value.AddressOrAccountId == account then
+                table.remove(permissions, key)
+                oldPermission = value
+                break
+            end
+        end
+
+        if oldPermission then
+            local permittedCommands = {}
+            for command in oldPermission.PermittedCommands do
+                table.insert(permittedCommands, command)
+            end
+
+            local newPermission = bit32.bor(oldPermission.Permissions, permission)
+            table.insert(permissions, Game.ServerSettings.SavedClientPermission.__new(oldPermission.Name, oldPermission.AddressOrAccountId, newPermission, permittedCommands))
+        else
+            table.insert(permissions, Game.ServerSettings.SavedClientPermission.__new("Unknown", account, permission, {}))
+        end
+
+        Game.ServerSettings.set_ClientPermissions(permissions)
+
+        cmd:Reply(string.format("Assigned \"%s\" the permission %s.", steamid, args[2]))
+
+        return true
+    end, ClientPermissions.All, true)
+
+    ST.Commands.Add("!revokepermission", function (args, cmd)
+        if #args < 2 then
+            cmd:Reply("Usage: !revokepermission \"SteamID\" \"Permission\"", Color.Red)
+            return true
+        end
+
+        local steamid = args[1]
+        local permission = ClientPermissions[args[2]]
+
+        if permission == nil then
+            cmd:Reply("Invalid Permission.", Color.Red)
+            return true
+        end
+
+        local account = AccountId.Parse(steamid)
+
+        if account == nil then
+            cmd:Reply("Invalid SteamID.", Color.Red)
+            return true
+        end
+
+        local permissions = Game.ServerSettings.ClientPermissions
+        for key, value in pairs(permissions) do
+            if value.AddressOrAccountId == account then
+                if bit32.band(value.Permissions, permission) ~= permission then
+                    break
+                end
+
+                table.remove(permissions, key)
+
+                local permittedCommands = {}
+                for command in value.PermittedCommands do
+                    table.insert(permittedCommands, command)
+                end
+
+                local newPermission = bit32.band(value.Permissions, bit32.bnot(permission))
+                table.insert(permissions, Game.ServerSettings.SavedClientPermission.__new(value.Name, value.AddressOrAccountId, newPermission, permittedCommands))
+
+                Game.ServerSettings.set_ClientPermissions(permissions)
+
+                cmd:Reply(string.format("Revoked \"%s\" the permission %s.", steamid, args[2]))
+
+                return true
+            end
+        end
+
+        cmd:Reply(string.format("\"%s\" already doesn't have the permission %s.", steamid, args[2]))
+
+        return true
+    end, ClientPermissions.All, true)
 
     ST.Commands.Add("!ban", function (args, cmd)
         if #args < 2 then
@@ -98,6 +200,8 @@ module.OnDisabled = function ()
     ST.Commands.Remove("!ban")
     ST.Commands.Remove("!isbanned")
     ST.Commands.Remove("!unban")
+    ST.Commands.Remove("!givepermission")
+    ST.Commands.Remove("!revokepermission")
 end
 
 return module
