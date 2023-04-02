@@ -170,7 +170,7 @@ module.OnEnabled = function ()
         sendDelay = Timer.GetTime() + 5
     end)
 
-    Hook.Add("chatMessage", "ServerTools.DiscordLogAlerts.ChatMessage", function (client, message)
+    Hook.Add("chatMessage", "ServerTools.DiscordLogAlerts.ChatMessage", function (message, client)
         SendMessage(string.format("`%s` ***%s***: %s", tostring(client.AccountId), client.Name, message), "Chat")
     end)
 
