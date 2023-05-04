@@ -115,7 +115,7 @@ module.OnEnabled = function ()
         cmd:Reply("Submarines are being updated, this may take a while, check console for more details. Do not start the game while this is in progress.", Color.Yellow)
     end, ClientPermissions.ConsoleCommands, true)
 
-    if ExecutionNumber == 0 then -- prevents reloadlua from re-executing this code
+    if Game.IsDedicated and ExecutionNumber == 0 then -- prevents reloadlua from re-executing this code
         Timer.Wait(function ()
             module.UpdateSubmarines()
         end, 5000)
