@@ -103,8 +103,8 @@ module.OnEnabled = function ()
 
     Hook.Add("roundEnd", "ServerTools.DiscordLogAlerts.RoundEnd", function ()
         local traitors = ""
-        if Traitormod ~= nil and Traitormod.SelectedGamemode ~= nil and Traitormod.SelectedGamemode.Traitors ~= nil then
-            for character, traitor in pairs(Traitormod.SelectedGamemode.Traitors) do
+        if Traitormod ~= nil then
+            for _, character in pairs(Traitormod.RoleManager.FindAntagonists()) do
                 local client = ST.Utils.FindClientByCharacter(character)
                 if client == nil then
                     traitors = traitors .. "(?) '" .. character.Name .. "' "
