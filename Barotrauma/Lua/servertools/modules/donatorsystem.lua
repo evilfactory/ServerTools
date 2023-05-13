@@ -23,8 +23,48 @@ if SERVER then
     end)
 end
 
+LuaUserData.MakeMethodAccessible(Descriptors["Barotrauma.Item"], "set_InventoryIconColor")
+
 module.OnEnabled = function ()
     if CLIENT then return end
+
+    ST.Commands.Add("!clothcolor", function (args, cmd, client)
+        if not client.Character or not client.Character.IsHuman or client.Character.IsDead then
+            cmd:Reply("You must be alive to use this command.")
+        end
+
+        if #args < 3 then
+            cmd:Reply("Usage: !clothcolor \"R\" \"G\" \"B\"")
+            return true
+        end
+
+        local r = tonumber(args[1])
+        local g = tonumber(args[2])
+        local b = tonumber(args[3])
+
+        if r == nil or g == nil or b == nil then
+            cmd:Reply("Usage: !clothcolor \"R\" \"G\" \"B\"")
+            return true
+        end
+
+        local item = client.Character.Inventory.GetItemInLimbSlot(InvSlotType.InnerClothes)
+
+        if item == nil then
+            cmd:Reply("You must be wearing clothes to use this command.")
+            return true
+        end
+
+        item.set_InventoryIconColor(Color(r, g, b))
+        item.SpriteColor = Color(r, g, b)
+
+        local color = item.SerializableProperties[Identifier("SpriteColor")]
+        Networking.CreateEntityEvent(item, Item.ChangePropertyEventData(color, item))
+
+        local invColor = item.SerializableProperties[Identifier("InventoryIconColor")]
+        Networking.CreateEntityEvent(item, Item.ChangePropertyEventData(invColor, item))
+
+        cmd:Reply(string.format("Set your clothes color to %s, %s, %s", r, g, b))
+    end, ClientPermissions.KarmaImmunity)
 
     ST.Commands.Add("!chatstyle", function (args, cmd, client)
         if #args < 1 then
@@ -94,6 +134,7 @@ module.OnDisabled = function ()
     if CLIENT then return end
 
     ST.Commands.Remove("!chatstyle")
+    ST.Commands.Remove("!clothcolor")
     Hook.Remove("DonatorSystem.ChatMessage", "DonatorSystem.ChatMessage")
 end
 
